@@ -44,6 +44,13 @@ return [
             'driver' => 'log',
         ],
 
+        'parse' => [
+            'driver' => 'parse',
+            'key' => env('PARSE_KEY'),
+            'url' => env('PARSE_URL'),
+            'app_id' => env('PARSE_APP_ID'),
+        ],
+
     ],
 
 ];
