@@ -12,6 +12,9 @@
 */
 
 
-Route::get('/', 'AppController@index');
+Route::get('/', function () {
+    return view('welcome');
+});
+
 Route::post('/product/{id}/bid', 'AppController@bid');
 Route::get('/{slug?}', 'AppController@show');

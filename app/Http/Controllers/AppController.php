@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Bid;
+use App\Events\BidWasCreated;
 use App\Product;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Event;
 
 class AppController extends Controller
 {
@@ -40,7 +42,9 @@ class AppController extends Controller
         if (isset($lastBid) and $request->get('amount') <= $lastBid->amount)
             return redirect('/'.$lastBid->product->slug)->with('errors', collect(['You must bid a higher amount, idiot...']));
 
-        Bid::create($request->all());
+        $bid = Bid::create($request->all());
+
+        Event::fire(new BidWasCreated($bid));
 
         return redirect('/'.Product::find($productId)->slug)->with('success', collect(['Well done my friend, keep on bidding']));
     }
