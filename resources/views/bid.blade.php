@@ -53,23 +53,20 @@
 @endsection()
 
 @section('javascript')
-    <script src="//js.pusher.com/3.0/pusher.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.7/socket.io.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
     <script>
         $(document).ready(function() {
             login();
 
-            var pusher = new Pusher('0aba70d92427d26e79c3');
+            var socket = io('{{env('APP_URL')}}:3337/');
 
-            var channel = pusher.subscribe('all-users');
-
-            channel.bind('App\\Events\\BidWasCreated', function(message) {
+            socket.on('all-users:App\\Events\\BidWasCreated', function(message) {
 
                 $('#currentBid').text(message.bid.amount);
                 $('#bids').prepend('<div class="section__circle-container mdl-cell mdl-cell--2-col mdl-cell--1-col-phone"><h3>' + message.bid.amount + ' $ </h3></div> <div class="section__text mdl-cell mdl-cell--10-col-desktop mdl-cell--6-col-tablet mdl-cell--3-col-phone"><br><h5>' + message.bid.username + '</h5>This bid was set ' + moment(message.bid.created_at, 'YYYY-MM-DD').fromNow() +'.</div>');
 
             });
-
         });
 
         function login() {
